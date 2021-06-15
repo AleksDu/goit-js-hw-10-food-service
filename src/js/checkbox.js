@@ -2,21 +2,44 @@ const Theme = {
     LIGHT: 'light-theme',
     DARK: 'dark-theme',
 };
-const bodyRef = document.querySelector('body');
+const inputRef = document.querySelector('#theme-switch-toggle');
 
-function onChangeCheckbox (evt) {
-    if (evt.target.checked) {
-        bodyRef.classList.add(Theme.DARK);
-        bodyRef.classList.remove(Theme.LIGHT);
+inputRef.addEventListener('change', changeInput);
 
-        localStorage.setItem('Theme', Theme.DARK);
-         
-    } else if (!evt.target.checked) {
-        bodyRef.classList.add(Theme.LIGHT);
-        bodyRef.classList.remove(Theme.DARK);
-        
-        localStorage.setItem('Theme', Theme.LIGHT);
-    };
+function changeInput(event) {
+  event.currentTarget.checked ? checkedInput() : notCheckedInput();
 }
 
-export {onChangeCheckbox};
+function checkedInput() {
+    
+    document.body.classList.add(Theme.DARK);
+    document.body.classList.remove(Theme.LIGHT);
+
+    localStorage.setItem('theme', Theme.DARK);
+    inputRef.checked = true;
+}
+function notCheckedInput() {
+    document.body.classList.add(Theme.LIGHT);
+    document.body.classList.remove(Theme.DARK);
+        
+    localStorage.setItem('theme', Theme.LIGHT);
+    inputRef.checked = false;
+    };
+
+
+function currentTheme() {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === Theme.LIGHT || savedTheme === null) {
+    notCheckedInput();
+    return;
+  }
+
+  if (savedTheme === Theme.DARK) {
+    checkedInput();
+    return;
+  }
+}
+
+currentTheme();
+
+
